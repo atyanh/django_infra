@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage('pull update') {
             steps {
+                rm -rf django/
                 sh 'echo Pulling updates..'
                 sh 'git clone https://github.com/atyanh/django.git'
             }
@@ -20,10 +21,5 @@ pipeline {
         }
     
 
-    }
-    post {
-        always {
-            deleteDir()
-        }
     }
 }
