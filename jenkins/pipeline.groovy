@@ -8,13 +8,16 @@ pipeline {
                 sh 'git clone https://github.com/atyanh/django.git'
             }
         }
-	stage('build') {
+	    stage('build') {
             steps {
+
                 sh 'echo building..'
+                sh 'cd django'
+                sh 'docker build . -t localhost:8082/repository/django/web:latest'
                 sh 'ls'
             }
         }
-	stage('update') {
+	    stage('update') {
             steps {
                 sh 'echo Updating..'
             }
