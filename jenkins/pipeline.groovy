@@ -18,6 +18,12 @@ pipeline {
                 sh 'echo Updating..'
             }
         }
+    
 
+    }
+    post {
+        always {
+            deleteDir()
+        }
     }
 }
