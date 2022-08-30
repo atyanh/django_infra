@@ -12,8 +12,7 @@ pipeline {
             steps {
 
                 sh 'echo building..'
-                sh 'cd django'
-                sh 'docker build . -t localhost:8082/repository/django/web:latest'
+                sh 'docker build ./django/ -t localhost:8082/repository/django/web:latest'
                 sh 'ls'
             }
         }
