@@ -16,9 +16,9 @@ pipeline {
                 sh 'ls'
             }
         }
-	    stage('update') {
+	    stage('push to repository') {
             steps {
-                sh 'echo Updating..'
+                sh 'docker push localhost:8082/repository/django/web:latest'
             }
         }
     
