@@ -1,7 +1,7 @@
 pipeline {
   environment {
     registry = "localhost:8082/repository/django/web"
-    registryCredential = 'docker'
+    registryCredential = 'nexus'
     dockerImage = ''
   }
   agent any
