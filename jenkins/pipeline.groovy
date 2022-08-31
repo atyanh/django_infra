@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "127.0.0.1:8082/repository/django/web"
+    registry = "localhost:8082/repository/django/web"
     registryCredential = 'nexus'
     dockerImage = ''
   }
@@ -20,8 +20,7 @@ pipeline {
     }
     stage('Deploy Image') {
       steps{
-        sh "docker login localhost:8082 -u admin -p admin123"
-        sh "docker push $registry:$BUILD_NUMBER"
+        sh "docker login localhost:8082 -u admin -p admin123 && docker push $registry:$BUILD_NUMBER"
       }
     }
 
