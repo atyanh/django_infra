@@ -1,7 +1,6 @@
 pipeline {
   environment {
-    registry = "localhost:8082"
-    repository = "localhost:8082/repository/django/web"
+    registry = "localhost:8082/repository/django/web"
     registryCredential = 'nexus'
     dockerImage = ''
   }
@@ -15,7 +14,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build $repository + ":$BUILD_NUMBER"
+          dockerImage = docker.build $registry + ":$BUILD_NUMBER"
         }
       }
     }
@@ -30,7 +29,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $repository:$BUILD_NUMBER"
+        sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
   }
