@@ -22,8 +22,9 @@ pipeline {
       steps{
         sh "docker login localhost:8082 -u admin -p admin123"
         sh "docker push $registry:$BUILD_NUMBER"
+      }
     }
-    
+
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
