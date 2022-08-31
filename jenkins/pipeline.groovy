@@ -10,8 +10,8 @@ pipeline {
         }
 	    stage('build') {
             steps {
-
-                sh 'echo building..'
+                sh 'docker rmi localhost:8082/repository/django/web:latest'
+                sh 'docker login localhost:8082 -u admin -p admin123'
                 sh 'docker build ./django/ -t localhost:8082/repository/django/web:latest'
                 sh 'ls'
             }
