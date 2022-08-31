@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "localhost:8082/repository/django"
+    registry = "localhost:8082/repository/django/web"
     registryCredential = 'docker'
     dockerImage = ''
   }
@@ -21,7 +21,7 @@ pipeline {
     stage('Deploy Image') {
       steps{
         script {
-          docker.withRegistry( 'localhost:8082', registryCredential ) {
+          docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
           }
         }
