@@ -1,7 +1,7 @@
 pipeline {
   environment {
     registry = "localhost:8082/repository/django/web"
-    nexus_password = credentials('nexus_password')
+    nexus_password = "admin123"
   }
   agent any
   stages {
