@@ -13,7 +13,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          sh "docker bulid . -t $registry:$BUILD_NUMBER"
+          sh "docker build . -t $registry:$BUILD_NUMBER"
         }
       }
     }
