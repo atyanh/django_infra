@@ -1,0 +1,69 @@
+---
+- hosts: ops_server
+  tasks: 
+
+    - name: build container image
+      local_action:
+        module: docker_image
+        name: my_nexus:v1.0
+        build:
+          path: ../nexus
+        source: build
+
+    - name: archive container image as a tarball
+      local_action:
+        module: docker_image
+        name: my_nexus:v1.0
+        archive_path: ./my_nexus:v1.0.tar
+        source: pull
+
+    - name: copy tarball to server
+      copy:
+        src: ./my_nexus:v1.0.tar
+        dest: /home/ubuntu/my_nexus:v1.0.tar
+
+    - name: load container from tarball
+      docker_image:
+        name: my_nexus:v1.0
+        load_path: /home/ubuntu/my_nexus:v1.0.tar
+        source: load
+
+    - name: Run Nexus container
+      community.docker.docker_container:
+        name: nexus
+        image: my_nexus:v1.0
+        ports:
+          - "8081:8081"
+          - "8082:8082"
+        # volumes:
+        #   - /home/ubuntu/nexus-data:/nexus-data
+    
+    - name: rm local tar file
+      local_action:
+        module: file
+        path: ./my_nexus:v1.0.tar
+        state: absent
+
+    - name: Remove image from local
+      local_action:
+        module: docker_image
+        state: absent
+        name: my_nexus
+        tag: v1.0
+    
+    - name: rm tar file in server
+      file:
+        path: /home/ubuntu/my_nexus:v1.0.tar
+        state: absent
+
+    - name: Install Nexus cli
+      become_user: ubuntu
+      pip:
+        name: 
+         - nexus3-cli
+
+    - name: Logging in nexus
+      shell: "sleep 60 && /home/ubuntu/.local/bin/nexus3 login -U http://localhost:8081 -u admin -p admin123 --x509_verify"
+
+    - name: create docker repository
+      command: /home/ubuntu/.local/bin/nexus3 repository create hosted docker --http-port 8082 --force-basic-auth django

@@ -1,0 +1,2 @@
+[ops_server]
+first ansible_user=ubuntu ansible_ssh_private_key_file=/home/hro/.ssh/for_tf 
