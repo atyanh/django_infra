@@ -24,17 +24,17 @@ pipeline {
       }
     }
 
+    stage('Pushing Image') {
+      steps{
+        sh "docker login localhost:8082 -u admin -p $nexus_password && docker push $registry:$BUILD_NUMBER"
+      }
+    }
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER && docker rmi $registry:latest"
       }
     }
 
-    stage('Pushing Image') {
-      steps{
-        sh "docker login localhost:8082 -u admin -p $nexus_password && docker push $registry:$BUILD_NUMBER"
-      }
-    }
 
     stage('Deploy on EKS') {
       steps {
