@@ -13,7 +13,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          sh "echo $NEXUS_USR $NEXUS_PSW"
+          sh "echo $NEXUS_USR:$NEXUS_PSW > test"
           sh "docker build . -t $registry:$BUILD_NUMBER"
           sh "docker build . -t $registry:latest"
         }
