@@ -1,7 +1,7 @@
 pipeline {
   environment {
     registry = "localhost:8082/repository/django/web"
-    nexus_password = credentials('nexus_password')
+    NEXUS = credentials('nexus')
   }
   agent any
   stages {
@@ -13,7 +13,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          sh "echo $nexus_password"
+          sh "echo $NEXUS_USR $NEXUS_PSW"
           sh "docker build . -t $registry:$BUILD_NUMBER"
           sh "docker build . -t $registry:latest"
         }
