@@ -13,6 +13,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
+          sh "echo $nexus_bassword"
           sh "docker build . -t $registry:$BUILD_NUMBER"
           sh "docker build . -t $registry:latest"
         }
@@ -20,7 +21,6 @@ pipeline {
     }
     stage('Push Image') {
       steps{
-        sh "echo $nexus_bassword"
         sh "docker login localhost:8082 -u admin -p $nexus_password && docker push $registry:$BUILD_NUMBER && docker push $registry:latest"
       }
     }
