@@ -3,7 +3,7 @@ pipeline {
     registry = "localhost:8082/repository/django/web"
     nexus_password = credentials('nexus_password')
     aws_access_key_id = credentials('aws_access_key_id')
-    aws_secret_access_key = credentials('aws_secret_access_id')
+    aws_secret_access_key = credentials('aws_secret_access_key')
   }
   agent any
   stages {
