@@ -20,14 +20,10 @@ pipeline {
         }
       }
     }
-    stage('Push Image') {
-      steps{
-        sh "docker login localhost:8082 -u admin -p $nexus_password && docker push $registry:$BUILD_NUMBER && docker push $registry:latest"
-      }
-    }
 
     stage('Pushing Image') {
       steps{
+        sh "docker login localhost:8082 -u admin -p $nexus_password && docker push $registry:$BUILD_NUMBER && docker push $registry:latest"
         sh "docker login localhost:8082 -u admin -p $nexus_password && docker push $registry:$BUILD_NUMBER"
       }
     }
