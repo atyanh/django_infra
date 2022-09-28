@@ -36,7 +36,7 @@ pipeline {
 
     stage('Deploy on EKS') {
       steps {
-        sh ("""docker run  -e AWS_ACCESS_KEY_ID=$aws_access_key_id \ 
+        sh ("""docker run  -e AWS_ACCESS_KEY_ID=$aws_access_key_id \
               -e AWS_SECRET_ACCESS_KEY=$aws_secret_access_key \
                -v /home/ubuntu/django_web.yml:/root/django_web.yml \
                --rm bearengineer/awscli-kubectl /bin/sh -c \
