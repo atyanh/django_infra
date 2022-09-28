@@ -36,7 +36,7 @@ pipeline {
 
     stage('Deploy on EKS') {
       steps {
-        sh ("docker run  -e AWS_ACCESS_KEY_ID=$aws_access_key_id \ 
+        sh ("""docker run  -e AWS_ACCESS_KEY_ID=$aws_access_key_id \ 
               -e AWS_SECRET_ACCESS_KEY=$aws_secret_access_key \
                -v /home/ubuntu/django_web.yml:/root/django_web.yml \
                --rm bearengineer/awscli-kubectl /bin/sh -c \
@@ -47,7 +47,7 @@ pipeline {
                     --docker-server=dard.life  \
                     --docker-password=admin119 \
                     --docker-username=admin || true && \
-               kubectl apply -f /root/django_web.yml'" )                          
+               kubectl apply -f /root/django_web.yml'""" )                          
       }
     }
   }
