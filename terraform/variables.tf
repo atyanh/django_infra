@@ -21,7 +21,7 @@ variable "ops_subnet_cidr" {
   default = "172.22.1.0/24"
 }
 
-variable "key_path" {
+variable "ssh_key_path" {
   type    = string
   default = "/home/hro/.ssh/for_tf.pub"
 }
@@ -51,4 +51,24 @@ variable "availability_zone_2" {
 variable "app_port" {
   type    = number
   default = 30000
+}
+
+
+############# for DB instance ##########
+
+variable "db_subnet_cidr_1" {
+  type    = string
+  default = "172.22.100.0/24"
+}
+
+variable "db_subnet_cidr_2" {
+  type    = string
+  default = "172.22.101.0/24"
+}
+
+############## for Route53 ###########
+
+variable "dns_zone_id" {
+  default = "zone_id"
+  type    = string
 }

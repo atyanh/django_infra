@@ -23,20 +23,24 @@
         dest: /home/ubuntu/my_nexus:v1.0.tar
 
     - name: load container from tarball
+      become: true
       docker_image:
         name: my_nexus:v1.0
-        load_path: /home/ubuntu/my_nexus:v1.0.tar
+        load_path: '/home/ubuntu/my_nexus:v1.0.tar'
         source: load
 
     - name: Run Nexus container
-      community.docker.docker_container:
+      docker_container:
         name: nexus
         image: my_nexus:v1.0
+        networks:
+          - name: "ops_network"
         ports:
           - "8081:8081"
           - "8082:8082"
-        # volumes:
-        #   - /home/ubuntu/nexus-data:/nexus-data
+        restart_policy: unless-stopped
+        volumes:
+         - nexus-data:/nexus-data
     
     - name: rm local tar file
       local_action:
@@ -63,7 +67,7 @@
          - nexus3-cli
 
     - name: Logging in nexus
-      shell: "sleep 60 && /home/ubuntu/.local/bin/nexus3 login -U http://localhost:8081 -u admin -p admin123 --x509_verify"
+      shell: "sleep 120 && /home/ubuntu/.local/bin/nexus3 login -U http://localhost:8081 -u admin -p admin119 --x509_verify"
 
     - name: create docker repository
       command: /home/ubuntu/.local/bin/nexus3 repository create hosted docker --http-port 8082 --force-basic-auth django

@@ -17,8 +17,27 @@ security:
     authenticators:
     - global:
         strategy: "triggeringUsersAuthorizationStrategy"
-# unclassified:
-#   location:
-#     url: http://172.16.1.27:8080/
+unclassified:
+  location:
+    url: http://dard.life:8080/
 jobs:
  - file: /var/jenkins_home/jobdsl.groovy
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - string:
+          description: "nexus password"
+          id: "nexus_password"
+          scope: GLOBAL
+          secret: ${NEXUS_PASSWORD}
+      - string:
+          description: "AWS Access key ID"
+          id: "aws_access_key_id"
+          scope: GLOBAL
+          secret: ${AWS_ACCESS_KEY_ID}
+      - string:
+          description: "AWS Secret Access Key"
+          id: "aws_secret_access_key"
+          scope: GLOBAL
+          secret: ${AWS_SECRET_ACCESS_KEY}

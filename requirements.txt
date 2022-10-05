@@ -1,0 +1,16 @@
+#Customize this variables for you
+
+#path to your public and private ssh key
+public_ssh_key_path:/home/hro/.ssh/for_tf.pub
+ssh_key_path:/home/hro/.ssh/for_tf
+
+jenkins_username:admin
+jenkins_password:admin119
+
+#Nexus username is admin
+nexus_password:admin119
+
+aws_access_key_id:AKIAZAQ4RTYREKMXGT3I
+aws_secret_access_key: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
+
+dns_zone_id:Z022226123SV0T9OL0AVP

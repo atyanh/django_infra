@@ -51,7 +51,7 @@ resource "aws_lb" "eks-lb" {
   subnets                    = [aws_subnet.public_subnet_for_eks_1.id, aws_subnet.public_subnet_for_eks_2.id]
   enable_deletion_protection = false
   tags = {
-    "kubernetes.io/service-name"          = "default/mario-service"
+    "kubernetes.io/service-name"        = "default/mario-service"
     "kubernetes.io/cluster/eks_cluster" = "owned"
   }
   depends_on = [
@@ -66,4 +66,9 @@ resource "aws_lb_listener" "http_listerner" {
     target_group_arn = aws_lb_target_group.tg_for_nodes.id
     type             = "forward"
   }
+}
+
+
+output "nlb_dns_name" {
+  value = aws_lb.eks-lb.dns_name
 }

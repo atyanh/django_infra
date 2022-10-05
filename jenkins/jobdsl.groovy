@@ -1,6 +1,6 @@
 pipelineJob('ci_cd_pipeline') {
     triggers {
-              scm('H/5 * * * *')
+              scm('H/20 * * * *')
     }
     definition {
         cpsScm {

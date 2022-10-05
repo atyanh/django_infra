@@ -1,4 +1,5 @@
 ---
+
 - hosts: ops_server
   become_user: ubuntu
   tasks: 
@@ -30,17 +31,23 @@
         source: load
 
     - name: Run jenkins container
-      community.docker.docker_container:
+      docker_container:
         name: jenkins
         image: my_jenkins:v1.0
+        networks:
+          - name: "ops_network"
         ports:
           - "8080:8080"
         volumes:
-#          - /home/ubuntu/jenkins_home:/var/jenkins_home
+          - jenkins_workspace:/var/jenkins_home/workspace
           - /var/run/docker.sock:/var/run/docker.sock  
         env:
           JENKINS_ADMIN_ID: "{{ username }}"
           JENKINS_ADMIN_PASSWORD: "{{ password }}"
+          NEXUS_PASSWORD: "{{ nexus_password }}"
+          AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+          AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+        restart_policy: unless-stopped
     
     - name: Remove image from local
       local_action:
@@ -58,4 +65,20 @@
     - name: rm tar file in server
       file:
         path: /home/ubuntu/my_jenkins:v1.0.tar
+        state: absent
+
+    - name: configuring kubernernetes deployement file with out data  
+      local_action: shell cat ../kube/django_web_ex.yml | \
+        sed -e "s#%%SQL_HOST%%#{{sql_host}}#" > ../kube/django_web.yml
+
+
+    - name: copy kube deployment to server
+      copy:
+        src: ../kube/django_web.yml
+        dest: /home/ubuntu/django_web.yml
+
+    - name: rm that temporary file
+      local_action:
+        module: file
+        path: ../kube/django_web.yml
         state: absent

@@ -1,0 +1,56 @@
+---
+
+- hosts: ops_server
+  become: yes
+  tasks:
+
+    - name: create directory for Prometheus
+      file:
+        path: /etc/prometheus/
+        state: directory
+        mode: '0755'
+    
+    - name: copy config file to server
+      copy:
+        src: ../monitoring/prometheus.yml
+        dest: /etc/prometheus/prometheus.yml
+
+    - name: run Prometheus container
+      docker_container:
+        name: prometheus
+        image: prom/prometheus:latest
+        networks:
+          - name: "ops_network"
+        ports:
+          - "9090:9090"
+        restart_policy: unless-stopped
+        volumes:
+          - /etc/prometheus:/etc/prometheus
+          - prometheus-data:/prometheus
+        command:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+    
+    - name: run Grafana container
+      docker_container:
+        name: grafana
+        image: grafana/grafana-oss:latest
+        networks:
+         - name: "ops_network"
+        ports:
+          - "3000:3000"
+        restart_policy: unless-stopped
+        volumes:
+          - grafana-data:/var/lib/grafana
+        
+    - name: run Node Exporter
+      become: true
+      docker_container:
+        name: node_exporter
+        image: quay.io/prometheus/node-exporter:latest
+        volumes:
+          - "/:/host:ro,rslave"
+        networks:
+          - name: "ops_network"
+        pid_mode: host
+        command:
+          - "--path.rootfs=/host"

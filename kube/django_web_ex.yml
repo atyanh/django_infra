@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployement
+  labels:
+    app: django-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: django-web
+  template:
+    metadata:
+      labels:
+        app: django-web
+    spec:
+      containers:
+      - name: django-web
+        image: dard.life/repository/django/web:latest
+        args:
+          - python
+          - manage.py
+          - runserver
+          - 0.0.0.0:8000
+        env:
+        - name: SECRET_KEY
+          value: foo
+        - name: DJANGOPROJECT_DATA_DIR
+          value: ./data
+        - name: DJANGO_SETTINGS_MODULE
+          value: djangoproject.settings.docker
+        - name: SQL_ENGINE
+          value: django.db.backends.postgresql
+        - name: SQL_DATABASE
+          value: djangoproject
+        - name: SQL_USER
+          value: djangoproject
+        - name: SQL_PASSWORD
+          value: admin119
+        - name: SQL_HOST
+          value: '%%SQL_HOST%%'
+        - name: SQL_PORT
+          value: "5432"
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 8000
+      imagePullSecrets:
+      - name: registrykey
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-web-service
+spec:
+  type: NodePort
+  selector:
+    app: django-web
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+    nodePort: 30000

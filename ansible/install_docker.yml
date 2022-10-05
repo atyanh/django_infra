@@ -2,6 +2,10 @@
 - hosts: ops_server
   become: yes
   tasks:
+  - name: Upgrade all apt packages
+    apt: upgrade=dist force_apt_get=yes
+  - name: Update apt-get repo and cache
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
   - name: install prerequisites
     apt:
       name:
@@ -12,7 +16,6 @@
       - software-properties-common
       - python3
       - python3-pip
-      update_cache: yes
   - name: add apt-key
     apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
@@ -35,3 +38,7 @@
         name: 
          - docker
          - docker-compose
+
+  - name: Create a network
+    docker_network:
+      name: ops_network
