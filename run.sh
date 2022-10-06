@@ -14,6 +14,7 @@ checkRequirements() {
        [ -z $aws_secret_access_key ]|| \
        [ -z $dns_zone_id ]          || \
        [ -z $nexus_password ]       || \
+       [ -z $sql_password ]       || \
        [ ! -f $public_ssh_key_path ]|| \
        [ ! -f $ssh_key_path ]; then
             echo "Correct data in requirements.txt file"
@@ -31,6 +32,7 @@ collectData (){
     aws_secret_access_key=$(grep aws_secret_access_key requirements.txt  | cut -d : -f2)
     dns_zone_id=$(          grep dns_zone_id requirements.txt            | cut -d : -f2)
     nexus_password=$(       grep nexus_password requirements.txt         | cut -d : -f2)
+    sql_password=$(       grep sql_password requirements.txt         | cut -d : -f2)
 
     echo -n $nexus_password > nexus/admin.password
 }
@@ -43,6 +45,7 @@ terraformApply () {
     terraform init && \
     terraform apply     -var="ssh_key_path=$public_ssh_key_path" \
                         -var="dns_zone_id=$dns_zone_id" \
+                        -var="sql_password=$sql_password" \
                         -auto-approve  && \
     instance_id=$(      terraform output instance_id      | tr -d '"') && \
     instance_ip_addr=$( terraform output instance_ip_addr | tr -d '"') && \
@@ -66,6 +69,7 @@ configureOpsServer() {
                                             -e password=$jenkins_password  \
                                             -e nexus_password=$nexus_password \
                                             -e sql_host=$sql_host \
+                                            -e sql_password=$sql_password \
                                             -e aws_access_key_id=$aws_access_key_id \
                                             -e aws_secret_access_key=$aws_secret_access_key && \ 
     ansible-playbook install_monitoring.yml -e ansible_host=$instance_ip_addr && \

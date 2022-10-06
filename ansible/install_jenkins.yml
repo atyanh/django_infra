@@ -69,7 +69,9 @@
 
     - name: configuring kubernernetes deployement file with out data  
       local_action: shell cat ../kube/django_web_ex.yml | \
+        sed -e "s#%%SQL_PASSWORD%%#{{sql_password}}#" | \
         sed -e "s#%%SQL_HOST%%#{{sql_host}}#" > ../kube/django_web.yml
+
 
 
     - name: copy kube deployment to server

@@ -66,6 +66,11 @@ variable "db_subnet_cidr_2" {
   default = "172.22.101.0/24"
 }
 
+variable "sql_password" {
+  type = string
+  default = "sql_password"
+}
+
 ############## for Route53 ###########
 
 variable "dns_zone_id" {

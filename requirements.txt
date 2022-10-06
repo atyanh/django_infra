@@ -13,4 +13,4 @@ nexus_password:admin119
 aws_access_key_id:awsaccesskeyid
 aws_secret_access_key:awssecretaccesskey
 
-dns_zone_id:Z022226123SV0T9OL0AVP
+sql_password:admin

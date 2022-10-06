@@ -36,7 +36,7 @@ spec:
         - name: SQL_USER
           value: djangoproject
         - name: SQL_PASSWORD
-          value: admin119
+          value: '%%SQL_PASSWORD%%'
         - name: SQL_HOST
           value: '%%SQL_HOST%%'
         - name: SQL_PORT

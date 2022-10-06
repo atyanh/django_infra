@@ -52,7 +52,7 @@ resource "aws_db_instance" "rds_db" {
   engine_version      = "12.7"
   instance_class      = "db.t3.micro"
   username            = "djangoproject"
-  password            = "admin119"
+  password            = var.sql_password
   skip_final_snapshot = true
   vpc_security_group_ids = [ aws_security_group.db_sg.id ]
 
